@@ -99,37 +99,39 @@ private final Logger log = LoggerFactory.getLogger(getClass());
 
 
     // Endpoint para realizar o saque
-    @PutMapping("/withdraw")
-    public ResponseEntity<PersonalAccount> withdraw(@RequestParam Long accountId, @RequestParam Double amount) {
-        log.info("Realizando saque de " + amount + " da conta com ID: " + accountId);
+@PutMapping("/saque")
+public ResponseEntity<PersonalAccount> saque(@RequestParam Long accountId, @RequestParam Double valorSaque) {
+    log.info("Realizando saque de " + valorSaque + " da conta com ID: " + accountId);
 
-        // Verifica se a conta existe
-        PersonalAccount account = repository.findById(accountId)
-                .orElse(null);
+    // Verifica se a conta existe
+    PersonalAccount account = repository.findById(accountId)
+            .orElse(null);
 
-        if (account == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        // Valida o valor do saque
-        if (amount <= 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-
-        // Verifica se o saldo é suficiente
-        if (account.getSaldoinicial() < amount) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(null); // Saldo insuficiente
-        }
-
-        // Atualiza o saldo da conta
-        account.setSaldoinicial(account.getSaldoinicial() - amount);
-
-        // Salva a conta com o saldo atualizado
-        repository.save(account);
-
-        // Retorna a conta com os dados atualizados
-        return ResponseEntity.ok(account);
+    if (account == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+    // Valida o valor do saque
+    if (valorSaque <= 0) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
+    // Verifica se o saldo é suficiente
+    if (account.getSaldoinicial() < valorSaque) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(null); // Saldo insuficiente
+    }
+
+    // Atualiza o saldo da conta
+    account.setSaldoinicial(account.getSaldoinicial() - valorSaque);
+
+    // Salva a conta com o saldo atualizado
+    repository.save(account);
+
+    // Retorna a conta com os dados atualizados
+    return ResponseEntity.ok(account);
+}
+
+
 
 }
