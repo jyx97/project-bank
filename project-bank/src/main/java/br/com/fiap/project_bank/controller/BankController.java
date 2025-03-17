@@ -41,9 +41,13 @@ private final Logger log = LoggerFactory.getLogger(getClass());
     @GetMapping("id/{id}")
     public ResponseEntity <PersonalAccount> getAccountById(@PathVariable Long id){
         log.info("Buscando conta com o ID: " + id);
+        return getAccount(id);
+    }
+
+    private ResponseEntity<PersonalAccount> getAccount(Long id) {
         return repository.findById(id)
-            .map(account -> ResponseEntity.ok(account))
-            .orElseGet(() -> ResponseEntity.notFound().build());
+                .map(account -> ResponseEntity.ok(account))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
    
     // conta por CPF
