@@ -6,7 +6,5 @@ import br.com.fiap.project_bank.model.PersonalAccount;
 
 public interface PersonalAccountRepository extends JpaRepository<PersonalAccount,Long>{
     PersonalAccount findByCpf(String cpf);
-    //insert
-    //delete
-    //select
+    
 }
